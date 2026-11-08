@@ -15,19 +15,25 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Java 17
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
 
-      - name: Setup Gradle 8.13
+      - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.13'
 
-      - name: Build Debug APK
-        run: gradle assembleDebug
+      - name: Check Manifest
+        run: |
+          echo "Checking AndroidManifest.xml"
+          cat -n app/src/main/AndroidManifest.xml
+          xmllint --noout app/src/main/AndroidManifest.xml
+
+      - name: Build APK
+        run: gradle assembleDebug --stacktrace --info
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
