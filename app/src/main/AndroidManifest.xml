@@ -1,40 +1,28 @@
 
-name: Build Daksx MRPack Builder APK
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
+    <uses-permission android:name="android.permission.INTERNET" />
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+    <application
+        android:allowBackup="true"
+        android:label="Daksx MRPack Builder"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
-      - name: Set up Gradle 8.13
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.13'
+        </activity>
 
-      - name: Check Gradle version
-        run: gradle --version
+    </application>
 
-      - name: Build APK with detailed logs
-        run: gradle assembleDebug --stacktrace --info
-
-      - name: Upload APK
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: Daksx-MRPack-Builder-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
+</manifest>
